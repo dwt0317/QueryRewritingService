@@ -37,14 +37,15 @@ class RewritingServiceHandler:
         try:
             if self._cut_all:
                 for word in q_list:
-                    items = self._model.most_similar(word, topn=8)
+                    items = self._model.most_similar(word, topn=10)
                     for item in items:
                         candi_list.append([item[0].encode('utf-8'), item[1]])
             else:
                 query_vec = np.zeros(200)
                 for word in q_list:
                     query_vec += self._model.wv[word]
-                items = self._model.wv.similar_by_vector(query_vec, topn=20)
+                query_vec /= len(q_list)
+                items = self._model.wv.similar_by_vector(query_vec, topn=10)
                 for item in items:
                     candi_list.append([item[0].encode('utf-8'), item[1]])
         except Exception as e:
