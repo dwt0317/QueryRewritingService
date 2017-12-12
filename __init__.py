@@ -5,7 +5,8 @@ from rewriting.MyTBinaryProtocol import *
 from thrift.transport import TSocket
 from thrift.transport import TTransport
 from thrift.server import TServer
-
+import threading
+import sys
 
 if __name__ == '__main__':
     handler = RewritingServiceHandler()
@@ -14,6 +15,14 @@ if __name__ == '__main__':
     tfactory = TTransport.TBufferedTransportFactory()
     pfactory = MyTBinaryProtocolFactory()
 
-    server = TServer.TThreadPoolServer(processor, transport, tfactory, pfactory)
-    print 'Rewriting server:ready to start'
-    server.serve()
+    try:
+        server = TServer.TThreadPoolServer(processor, transport, tfactory, pfactory)
+        print 'Rewriting server:ready to start'
+        server.serve()
+    except KeyboardInterrupt:
+        transport.close()
+        print "Service closed successfully."
+    except Exception as e:
+        print(repr(e))
+
+
