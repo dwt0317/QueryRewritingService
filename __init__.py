@@ -21,7 +21,8 @@ if __name__ == '__main__':
         server.serve()
     except KeyboardInterrupt:
         transport.close()
-        print "Service closed successfully."
+        sys.exit(0)
+        # print "Service closed successfully."
     except Exception as e:
         print(repr(e))
 
